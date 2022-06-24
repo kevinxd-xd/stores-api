@@ -1,4 +1,5 @@
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const proxy = require('../helpers/proxy.js')
 
 module.exports =  {
         async getSource(link) {
@@ -6,9 +7,11 @@ module.exports =  {
             if (link.includes('shopify') || !link.includes('products') || link.includes('.js') || link.includes('variant')) {
                 return false;
             }
-
             let jsLink = link + ".js";
-            const response = await fetch(jsLink);
+            const pa = await proxy.genRandomProxy();
+            const response = await fetch(jsLink, {
+                "agent": pa,
+            });
             const data = await response.json();
             return data;
         }

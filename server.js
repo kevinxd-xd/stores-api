@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-const apiRouter = require('./routes/api.js')
+const apiRouter = require('./routes/shopifyapi.js')
 const app = express();
 const port = process.env.PORT || 3000;
 

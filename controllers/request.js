@@ -10,11 +10,16 @@ module.exports =  {
             }
             let jsLink = link + ".js";
             const pa = await proxy.genRandomProxy();
-            const response = await fetch(jsLink, {
-                "agent": pa,
-            });
-            const data = await response.json();
-            const prdData = new ShopifyProduct(link, data);
-            return prdData;
+            try {
+                const response = await fetch(jsLink, {
+                    "agent": pa,
+                });
+                const data = await response.json();
+                const prdData = new ShopifyProduct(link, data);
+                return prdData;
+            }
+            catch (error) {
+                return error;
+            }
         }
 }

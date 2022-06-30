@@ -2,12 +2,12 @@ const express = require('express')
 const router = express.Router()
 
 // Necessary Controllers
-const request = require('../controllers/request.js')
+const request = require('../controllers/shopifyrequest.js')
 
 
 // Routes
-router.get('/link/:url', async (req, res) => {
-    const link = decodeURIComponent(req.params.url);
+router.get('', async (req, res) => {
+    const link = decodeURIComponent(req.query.url);
     const getData = await request.getSource(link);
     res.send(getData);
 });

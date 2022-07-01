@@ -1,4 +1,4 @@
-module.exports = class Product {
+module.exports = class ShopifyProduct {
     constructor(url, src) {
         this.URL = url;
         this.source = src;

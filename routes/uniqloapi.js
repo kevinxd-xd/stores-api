@@ -7,7 +7,7 @@ const request = require('../controllers/uniqlorequest.js')
 // Routes
 router.use('', async (req, res) => {
     const pid = req.query.pid;
-    const getData = await request.getSource(pid);
+    const getData = await request.getUniqlo(pid);
     res.send(getData);
 });
 

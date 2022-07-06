@@ -9,7 +9,12 @@ const request = require('../controllers/shopifyrequest.js')
 router.get('', async (req, res) => {
     const link = decodeURIComponent(req.query.url);
     const getData = await request.getSource(link);
-    res.send(getData);
+    if (getData != null) {
+        res.status(200).send(getData);
+    }
+    else {
+        res.status(400).send('Bad Request');
+    }
 });
 
 module.exports = router;

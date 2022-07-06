@@ -32,7 +32,7 @@ module.exports =  {
         const stockData = await this.getStock(pid);
 
         if (productData.status != "ok" || stockData.status != "ok") {
-            return "400 Bad Request";
+            return null;
         }
         else {
             return new UniqloProduct(pid, productData, stockData);

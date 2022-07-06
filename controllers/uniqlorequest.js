@@ -12,6 +12,7 @@ module.exports =  {
             },
             "agent": await proxy.genRandomProxy()
         });
+
         const jsondata = await req.json();
         return jsondata;
     },
@@ -22,6 +23,7 @@ module.exports =  {
             },
             "agent": await proxy.genRandomProxy()
         });
+
         const jsondata = await req.json();
         return jsondata;
     },
@@ -29,6 +31,11 @@ module.exports =  {
         const productData = await this.getProdInfo(pid);
         const stockData = await this.getStock(pid);
 
-        return new UniqloProduct(pid, productData, stockData);
+        if (productData.status != "ok" || stockData.status != "ok") {
+            return "400 Bad Request";
+        }
+        else {
+            return new UniqloProduct(pid, productData, stockData);
+        }
     }
 }

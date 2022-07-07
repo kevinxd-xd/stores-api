@@ -28,14 +28,19 @@ module.exports =  {
         return jsondata;
     },
     async getUniqlo(pid) {
-        const productData = await this.getProdInfo(pid);
-        const stockData = await this.getStock(pid);
-
-        if (productData.status != "ok" || stockData.status != "ok") {
-            return null;
+        try {
+            const productData = await this.getProdInfo(pid);
+            const stockData = await this.getStock(pid);
+    
+            if (productData.status != "ok" || stockData.status != "ok") {
+                return null;
+            }
+            else {
+                return new UniqloProduct(pid, productData, stockData);
+            }
         }
-        else {
-            return new UniqloProduct(pid, productData, stockData);
+        catch (error) {
+            console.error(error);
         }
     }
 }

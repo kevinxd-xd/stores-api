@@ -1,6 +1,6 @@
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-const proxy = require('../helpers/proxy.js')
-const ShopifyProduct = require('../model/shopifyprod.js');
+const proxy = require('../../helpers/proxy.js')
+const ShopifyProduct = require('../../model/shopifyprod.js');
 
 module.exports =  {
         async getSource(link) {

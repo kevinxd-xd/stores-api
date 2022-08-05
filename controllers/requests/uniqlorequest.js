@@ -1,7 +1,7 @@
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args))
-const proxy = require('../helpers/proxy.js')
+const proxy = require('../../helpers/proxy.js')
 const UserAgent = require('user-agents')
-const UniqloProduct = require('../model/uniqloprod.js')
+const UniqloProduct = require('../../model/uniqloprod.js')
 
 module.exports =  {
     async getStock(pid) {

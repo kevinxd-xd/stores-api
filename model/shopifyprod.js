@@ -1,7 +1,6 @@
 module.exports = class ShopifyProduct {
     constructor(url, src) {
         this.URL = url;
-        this.source = src;
         this.vars = this.parseVariants(src);
         this.subnames = this.parseSubNames(src);
         this.pic = src.media[0].src;
@@ -9,8 +8,8 @@ module.exports = class ShopifyProduct {
     }
     parseVariants(source) {
         const variants = []
-        for (let key in this.source.variants) {
-            variants.push(this.source.variants[key].id);
+        for (let key in source.variants) {
+            variants.push(source.variants[key].id);
         }
         return variants;
     }

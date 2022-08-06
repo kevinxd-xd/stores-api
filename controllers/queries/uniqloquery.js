@@ -1,4 +1,5 @@
 const db = require('../../db/index.js')
+const UniqloProduct = require('../../model/uniqloprod');
 
 module.exports = {
     /**
@@ -6,32 +7,34 @@ module.exports = {
      * @param {string} link - pass in a pid and will return the uniqloprod that matches that PID
      */
     async getUniqloEntry(PID) {
-        db.connect.query(`SELECT * FROM product_uniqlo WHERE pid='${PID}';`, (err, res) => {
-            if (err) {
-                console.log(err.stack);
+        try {
+            const res = await db.connect.query(`SELECT * FROM product_uniqlo WHERE pid='${PID}';`);
+            if (res.rowCount < 1) {
+                return "No entries found";
             }
             else {
-                console.log(res.rows[0]);
+                const uniqloEntry = res.rows[0];
+                return new UniqloProduct(uniqloEntry.pid, uniqloEntry.url, uniqloEntry.salestatus, uniqloEntry.sizes, uniqloEntry.stockLevel, uniqloEntry.pic);
             }
-        });
+        }
+        catch (err) {
+            console.log(err.stack);
+        }
     },
 
     /**
      * This method inserts a uniqloprod object into the database
      * @param {uniqloprod} prod - uniqloprod object that contains all of the info needed to insert into the database
      */
-    // INSERT into product_shopify (url, respsrc, vars, subnames, picurl, prodname) VALUES (${prod.URL}, ${prod.source}, ARRAY ${prod.vars}, ARRAY ${prod.subnames}, ${prod.pic}, ${prod.prodName}
     async insertUniqloEntry(prod) {
-        const command = `INSERT into product_uniqlo (pid, url, salestatus, sizes, stocklevel, pic) VALUES ($1, $2, $3, $4, $5, $6);`
-        const values = [prod.pid, prod.url, prod.salestatus, prod.sizes, prod.stockLevel, prod.pic];
-        db.connect.query(command, values, (err, res) => {
-            if (err) {
-                console.log(err.stack);
-            }
-            else {
-                console.log(res);
-                console.log(res.rows[0]);
-            }
-        });
+        try {
+            const command = `INSERT into product_uniqlo (pid, url, salestatus, sizes, stocklevel, pic) VALUES ($1, $2, $3, $4, $5, $6);`
+            const values = [prod.pid, prod.url, prod.salestatus, prod.sizes, prod.stockLevel, prod.pic];
+            const res = db.connect.query(command, values);
+            console.log("Successfully inserted entry!");
+        }
+        catch (err) {
+            console.log(err.stack)
+        }
     },
 }

@@ -26,8 +26,7 @@ module.exports = {
             }
             else {
                 console.log("Successfully found at least 1 entry!");
-                const shopEntry = res.rows[0];
-                return new ShopifyProduct(shopEntry.url, shopEntry.vars, shopEntry.subnames, shopEntry.picurl, shopEntry.prodname);
+                return res.rows[0];
             }
         }
         catch (err) {

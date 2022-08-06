@@ -26,8 +26,7 @@ module.exports = {
             }
             else {
                 console.log("Successfully found at least 1 entry!");
-                const uniqloEntry = res.rows[0];
-                return new UniqloProduct(uniqloEntry.pid, uniqloEntry.url, uniqloEntry.salestatus, uniqloEntry.sizes, uniqloEntry.stockLevel, uniqloEntry.pic);
+                return res.rows[0];
             }
         }
         catch (err) {

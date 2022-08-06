@@ -13,10 +13,15 @@ module.exports = {
             const response = await fetch(jsLink, {
                 "agent": await proxy.genRandomProxy(),
             });
-            const data = await response.json();
-            const prdData = new ShopifyProduct();
-            prdData.setFields(link, data);
-            return prdData;
+            if (response.status != 200) {
+                return null;
+            }
+            else {
+                const data = await response.json();
+                const prdData = new ShopifyProduct();
+                prdData.setFields(link, data);
+                return prdData;
+            }
         }
         catch (error) {
             return error;

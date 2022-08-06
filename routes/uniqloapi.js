@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 // Necessary Controllers
-const request = require('../controllers/uniqlorequest.js')
+const request = require('../controllers/requests/uniqlorequest.js')
 
 // Routes
 router.use('', async (req, res) => {

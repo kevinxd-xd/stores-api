@@ -1,5 +1,6 @@
 const db = require('../../db/index.js')
-const ShopifyProduct = require('../../model/shopifyprod');
+const ShopifyProduct = require('../../model/shopifyprod')
+const ShopifyReq = require('../requests/shopifyrequest')
 
 module.exports = {
     /**
@@ -10,9 +11,21 @@ module.exports = {
         try {
             const res = await db.connect.query(`SELECT * FROM product_shopify WHERE url='${link}';`);
             if (res.rowCount < 1) {
-                return "No entries found";
+                console.log("No entry was found, making a request to corresponding server...");
+                const req = await ShopifyReq.getSource(link);
+                if (req) {
+                    console.log("Data received! Inserting into database...");
+                    await this.insertShopEntry(req);
+                    console.log("Relaying data to requester!");
+                    return req;
+                }
+                else {
+                    console.log("Bad link was provided! No results will be returned");
+                    return null;
+                }
             }
             else {
+                console.log("Successfully found at least 1 entry!");
                 const shopEntry = res.rows[0];
                 return new ShopifyProduct(shopEntry.url, shopEntry.vars, shopEntry.subnames, shopEntry.picurl, shopEntry.prodname);
             }

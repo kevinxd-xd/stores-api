@@ -1,5 +1,6 @@
 const db = require('../../db/index.js')
-const UniqloProduct = require('../../model/uniqloprod');
+const UniqloProduct = require('../../model/uniqloprod')
+const UniqloReq = require('../requests/uniqlorequest')
 
 module.exports = {
     /**
@@ -10,9 +11,21 @@ module.exports = {
         try {
             const res = await db.connect.query(`SELECT * FROM product_uniqlo WHERE pid='${PID}';`);
             if (res.rowCount < 1) {
-                return "No entries found";
+                console.log("No entry was found, making a request to corresponding server...");
+                const req = await UniqloReq.getUniqlo(PID);
+                if (req) {
+                    console.log("Data received! Inserting into database...");
+                    await this.insertUniqloEntry(req);
+                    console.log("Relaying data to requester!");
+                    return req;
+                }
+                else {
+                    console.log("Bad PID was provided! No results will be returned");
+                    return null;
+                }
             }
             else {
+                console.log("Successfully found at least 1 entry!");
                 const uniqloEntry = res.rows[0];
                 return new UniqloProduct(uniqloEntry.pid, uniqloEntry.url, uniqloEntry.salestatus, uniqloEntry.sizes, uniqloEntry.stockLevel, uniqloEntry.pic);
             }

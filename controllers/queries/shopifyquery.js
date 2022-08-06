@@ -20,7 +20,6 @@ module.exports = {
      * This method inserts a shopifyprod object into the database
      * @param {shopifyprod} prod - shopifyprod object that contains all of the info needed to insert into the database
      */
-    // INSERT into product_shopify (url, respsrc, vars, subnames, picurl, prodname) VALUES (${prod.URL}, ${prod.source}, ARRAY ${prod.vars}, ARRAY ${prod.subnames}, ${prod.pic}, ${prod.prodName}
     async insertShopEntry(prod) {
         const command = `INSERT into product_shopify (url, vars, subnames, picurl, prodname) VALUES ($1, $2, $3, $4, $5);`
         const values = [prod.URL, prod.vars, prod.subnames, prod.pic, prod.prodName];

@@ -3,8 +3,8 @@ module.exports = class ShopifyProduct {
         this.URL = url;
         this.vars = variants;
         this.subnames = subnames;
-        this.pic = pics;
-        this.prodName = productName;
+        this.picurl = pics;
+        this.prodname = productName;
     }
     parseVariants(source) {
         const variants = []
@@ -24,7 +24,7 @@ module.exports = class ShopifyProduct {
         this.URL = url;
         this.vars = this.parseVariants(src);
         this.subnames = this.parseSubNames(src);
-        this.pic = src.media[0].src;
-        this.prodName = src.title;
+        this.picurl = src.media[0].src;
+        this.prodname = src.title;
     }
 }

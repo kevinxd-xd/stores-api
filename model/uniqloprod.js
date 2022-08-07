@@ -4,7 +4,7 @@ module.exports = class UniqloProduct {
         this.url = url;
         this.salestatus = salestatus;
         this.sizes = sizes;
-        this.stockLevel = stocklevel;
+        this.stocklevel = stocklevel;
         this.pic = pics;
     }
     parseImgs(jsondata) {
@@ -44,7 +44,7 @@ module.exports = class UniqloProduct {
         this.url = "https://www.uniqlo.com/us/en/products/" + PID;
         this.salestatus = this.parseSaleBool(prodSRC);
         this.sizes = this.parseSizes(prodSRC)
-        this.stockLevel = this.parseStockLevel(stockSRC)
+        this.stocklevel = this.parseStockLevel(stockSRC)
         this.pic = this.parseImgs(prodSRC);
     }
 }

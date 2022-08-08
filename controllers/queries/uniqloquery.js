@@ -75,4 +75,24 @@ module.exports = {
             return null;
         }
     },
+
+    /**
+     * DELETE
+     * This method will delete the corresponding row that has the same pid
+     * @param {string} pid - pass in a pid and will delete the entry that matches that pid
+     */
+     async deleteUniqloEntry(pid) {
+        try {
+            console.log("Attempting to delete entry...");
+            const command = `DELETE FROM product_uniqlo WHERE pid= $1`;
+            const values = [pid];
+            const resp = await db.connect.query(command, values);
+            console.log("Succesfully deleted entry!");
+            return 200;
+        }
+        catch (err) {
+            console.log("An error occured, delete failed...");
+            console.log(err.stack);
+        }
+    }
 }

@@ -8,7 +8,9 @@ module.exports = {
      */
     async getShopEntry(link) {
         try {
-            const res = await db.connect.query(`SELECT * FROM product_shopify WHERE url='${link}';`);
+            const command = `SELECT * FROM product_shopify WHERE url= $1;`;
+            const values = [link];
+            const res = await db.connect.query(command,values);
             if (res.rowCount < 1) {
                 console.log("No entry was found...");
                 return null;
@@ -71,11 +73,25 @@ module.exports = {
             console.log("An error occured, update failed...");
             console.log(err.stack);
         }
-    }
+    },
 
     /**
      * DELETE
+     * This method will delete the corresponding row that has the same link
+     * @param {string} link - pass in a link and will delete the entry that matches that link
      */
-
-
+    async deleteShopEntry(link) {
+        try {
+            console.log("Attempting to delete entry...");
+            const command = `DELETE FROM product_shopify WHERE url= $1`;
+            const values = [link];
+            const resp = await db.connect.query(command, values);
+            console.log("Succesfully deleted entry!");
+            return 200;
+        }
+        catch (err) {
+            console.log("An error occured, delete failed...");
+            console.log(err.stack);
+        }
+    }
 }

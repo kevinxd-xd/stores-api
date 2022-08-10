@@ -1,11 +1,11 @@
 module.exports = class UniqloProduct {
-    constructor(PID, prodSRC, stockSRC) {
+    constructor(PID, url, salestatus, sizes, stocklevel, pics) {
         this.pid = PID;
-        this.url = "https://www.uniqlo.com/us/en/products/" + PID;
-        this.salestatus = this.parseSaleBool(prodSRC);
-        this.sizes = this.parseSizes(prodSRC)
-        this.stockLevel = this.parseStockLevel(stockSRC)
-        this.pic = this.parseImgs(prodSRC);
+        this.url = url;
+        this.salestatus = salestatus;
+        this.sizes = sizes;
+        this.stocklevel = stocklevel;
+        this.pic = pics;
     }
     parseImgs(jsondata) {
         const photos = [];
@@ -38,5 +38,13 @@ module.exports = class UniqloProduct {
         }
         stockLevels.unshift(totalStock);
         return stockLevels;
+    }
+    setFields(PID, prodSRC, stockSRC) {
+        this.pid = PID;
+        this.url = "https://www.uniqlo.com/us/en/products/" + PID;
+        this.salestatus = this.parseSaleBool(prodSRC);
+        this.sizes = this.parseSizes(prodSRC)
+        this.stocklevel = this.parseStockLevel(stockSRC)
+        this.pic = this.parseImgs(prodSRC);
     }
 }

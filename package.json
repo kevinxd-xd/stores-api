@@ -18,9 +18,11 @@
   },
   "homepage": "https://github.com/kevinxd-xd/stores-api#readme",
   "dependencies": {
+    "connect-pg-simple": "^7.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
+    "express-session": "^1.17.3",
     "node-fetch": "^3.2.6",
     "pg": "^8.7.3",
     "proxy-agent": "^5.0.0",

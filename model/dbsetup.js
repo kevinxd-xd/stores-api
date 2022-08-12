@@ -23,6 +23,25 @@ async function setup() {
             pic         text[]
     );`);
 
+    await db.connect.query(`CREATE TABLE "session" (
+        "sid" varchar NOT NULL COLLATE "default",
+          "sess" json NOT NULL,
+          "expire" timestamp(6) NOT NULL
+      )
+      WITH (OIDS=FALSE);
+      
+      ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
+      
+      CREATE INDEX "IDX_session_expire" ON "session" ("expire")
+    ;`);
+
+    await db.connect.query(
+        `CREATE TABLE users(
+            id              serial,
+            username        text,
+            discriminator   integer,
+            discord_id      text
+    );`);
     process.exit(0);
 }
 

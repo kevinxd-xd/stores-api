@@ -32,7 +32,7 @@ module.exports = {
      */
     async insertShopEntry(prod) {
         try {
-            const command = `INSERT into product_shopify (url, vars, subnames, picurl, prodname) VALUES ($1, $2, $3, $4, $5);`
+            const command = `INSERT INTO product_shopify (url, vars, subnames, picurl, prodname) VALUES ($1, $2, $3, $4, $5);`
             const values = [prod.URL, prod.vars, prod.subnames, prod.picurl, prod.prodname];
             const res = await db.connect.query(command, values);
             console.log("Successfully inserted entry!");

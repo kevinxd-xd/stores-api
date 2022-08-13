@@ -3,8 +3,8 @@ const express = require('express')
 const router = express.Router()
 
 // Necessary Controllers
-const query = require('../controllers/queries/uniqloquery')
-const request = require('../controllers/requests/uniqlorequest')
+const query = require('../../controllers/queries/uniqloquery')
+const request = require('../../controllers/requests/uniqlorequest')
 
 // Routes
 router.get('/get', async (req, res) => {

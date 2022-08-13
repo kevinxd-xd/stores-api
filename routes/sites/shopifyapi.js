@@ -3,8 +3,9 @@ const express = require('express')
 const router = express.Router()
 
 // Necessary Controllers
-const query = require('../controllers/queries/shopifyquery')
-const request = require('../controllers/requests/shopifyrequest')
+const query = require('../../controllers/queries/shopifyquery')
+const request = require('../../controllers/requests/shopifyrequest')
+
 
 // Routes
 router.get('/get', async (req, res) => {

@@ -1,6 +1,6 @@
 require('dotenv').config( {path: './.env'} )
 const express = require('express')
-const db = require('../db/index');
+const db = require('../../db/index');
 const router = express.Router()
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
@@ -37,31 +37,43 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/verify', async (req, res) => {
-    try {
-        // Fetch Access Token
-        const accessCredentials = await postCodeDiscord(req);
-        req.session.access_token = accessCredentials.user.access_token;
-        req.session.token_type = accessCredentials.user.token_type;
-        // Fetch user info with access token that we recived
-        const user = await getDiscordUserInfo(accessCredentials);
-        await addUserDB(user);
-        req.session.user = {
-            id: user.data.id,
-            username: user.data.username
-        };
-
-        // Check against our database for user
-        req.session.save(async (err) => {
+    if (!req.query.code) {
+        res.redirect("/api/login");
+    }
+    else {
+        req.session.regenerate(async (err) => {
             if (err) {
-                return next(err);
+                next(err)
             }
             else {
-                res.redirect("/api/login");
+                try {
+                    // Fetch Access Token
+                    const accessCredentials = await postCodeDiscord(req);
+                    req.session.access_token = accessCredentials.user.access_token;
+                    req.session.token_type = accessCredentials.user.token_type;
+                    // Fetch user info with access token that we recived
+                    const user = await getDiscordUserInfo(accessCredentials);
+                    await addUserDB(user);
+                    req.session.user = {
+                        id: user.data.id,
+                        username: user.data.username
+                    };
+            
+                    // Check against our database for user
+                    req.session.save(async (err) => {
+                        if (err) {
+                            return next(err);
+                        }
+                        else {
+                            res.redirect("/api/login");
+                        }
+                    });
+                }
+                catch (err) {
+                    console.log(err.stack);
+                }
             }
-        });
-    }
-    catch (err) {
-        console.log(err.stack);
+        })
     }
 });
 
@@ -125,17 +137,31 @@ async function getDiscordUserInfo(oauthData) {
     }
 }
 
+
+async function checkUserExist(userData) {
+    try {
+        const command = `SELECT * FROM users WHERE discord_id = $1`;
+        const values = [userData.data.id];
+        return ((await db.connect.query(command, values)).rowCount) > 0;
+    }
+    catch (err) {
+        console.log(err.stack);
+    }
+}
+
 /**
  * This method will add a user into the database to track after they login
  */
 async function addUserDB(userData) {
-    try {
-        const command = `INSERT INTO users (username, discriminator, discord_id, permission) VALUES ($1, $2, $3, true)`;
-        const values = [userData.data.username, userData.data.discriminator, userData.data.id];
-        await db.connect.query(command, values);
-    }
-    catch (err) {
-        console.log(err.stack);
+    if (!await checkUserExist(userData)){
+        try {
+            const command = `INSERT INTO users (username, discriminator, discord_id, permission) VALUES ($1, $2, $3, true)`;
+            const values = [userData.data.username, userData.data.discriminator, userData.data.id];
+            await db.connect.query(command, values);
+        }
+        catch (err) {
+            console.log(err.stack);
+        }
     }
 }
 
